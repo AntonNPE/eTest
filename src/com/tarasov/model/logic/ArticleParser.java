@@ -18,7 +18,9 @@ public class ArticleParser {
     public static void main(String[] args) throws IOException {
 
 //        articleParser();
-        textParser();
+//        textParser();
+
+
     }
 
     public static void articleParser() throws IOException {
@@ -43,19 +45,25 @@ public class ArticleParser {
 
         List<Article> al = new ArrayList<>();
         Document dc = Jsoup.connect("http://njnj.ru/golits/golits1-25_article.htm").get();
-        Element elBody = dc.body();
-        String html = elBody.toString();
+        dc.select("span.c2").forEach(Element::remove);
+        Element body = dc.body();
+        String html = body.toString();
 
-        Pattern pat = Pattern.compile("(?i)</h2>(.+?)<br>");
+//        System.out.println(html);
+        Pattern pat = Pattern.compile("(?i)</h2>(.+?)<h2");
         Matcher matcher = pat.matcher(html);
         int start = 0;
         int count = 0;
         while (matcher.find(start)) {
             String value = html.substring(matcher.start(), matcher.end());
-            System.out.println(value);
-            start = matcher.end();
             count++;
+            System.out.println(count + " - " + value);
+            start = matcher.end();
         }
-        System.out.println(count);
+
+        System.out.println( "the amount of the lines  is " + count);
     }
+
+
+
 }
