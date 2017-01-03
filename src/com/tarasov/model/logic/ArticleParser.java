@@ -4,6 +4,7 @@ import com.tarasov.model.entity.Article;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -17,8 +18,8 @@ public class ArticleParser {
     public static void main(String[] args) throws IOException {
 
 //        articleParser();
-          textParser();
-//        test();
+//          textParser();
+            testWhiteList();
 //            iterateOverElements();
     }
 
@@ -71,17 +72,40 @@ public class ArticleParser {
 //        System.out.println("the amount of the lines  is " + count);
     }
 
-    public static void test() throws IOException {
+    public static void testWhiteList() throws IOException {
 
         List<Article> al = new ArrayList<>();
         Document dc = Jsoup.connect("http://njnj.ru/golits/golits1-25_article.htm").get();
-        Elements tdTagElements = dc.getElementsByTag("td");
-//        for (Element el : tdTagElements) {
-//            System.out.println(el.ownText());
-//            System.out.println("-------");
+        Element body = dc.body();
+//        Elements tdElement = dc.getElementsByTag("td");
+//        Element trueElement =  tdElement.get(1);
+        body.select("span.c2").remove();
+        Whitelist customWhiteList = new Whitelist();
+        customWhiteList.addTags("h2");
+        String text = Jsoup.clean(body.toString(),customWhiteList);
+        String [] valuesArray = text.split("<h2(.+?)</h2>");
+//        for (String st : valuesArray){
+//            System.out.println(st);
 //        }
-        System.out.println(tdTagElements.get(1).ownText());
-        String [] st = tdTagElements.get(1).ownText().split("...");
+        String finalArray [] = new String[valuesArray.length-1];
+        System.arraycopy(valuesArray,1,finalArray,0,valuesArray.length-1);
+        for (String st : finalArray){
+            st=st.trim();
+            st=st.replaceAll("Top","");
+            System.out.println(st);
+        }
+
+
+
+//        Whitelist customWhiteList = new Whitelist();
+//        customWhiteList.addTags("h2");
+//        dc.select("span.c2").remove();
+//
+//        String text = Jsoup.clean(body.toString(),customWhiteList);
+//        String [] valuesArray = text.split("<h2(.+?)</h2>");
+//        for (String st : valuesArray){
+//            System.out.println(st);
+//        }
 
     }
 

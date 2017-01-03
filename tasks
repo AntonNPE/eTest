@@ -1,2 +1,3 @@
 (30.12.16)
-1. Try to remove all elements of the 'Document' except '<h2>...</h2>' and simple text
+1. Try to remove all elements of the 'Document' except '<h2>...</h2>' and simple text (almost done)
+2. Try to serialize arrays.
